@@ -1,0 +1,13 @@
+# Codeowners to all the files
+* @gbaranov
+* @NatSamo
+* @LinaAbu1306
+* @VViktoriia
+* @Gelyusya
+
+# Codeowners to all the workflows
+.github/ @Elgrueber
+.github/ @Rom-T
+.github/ @Keldieva
+.github/ @OlgaAutomation4
+.github/ @sashakolsky
