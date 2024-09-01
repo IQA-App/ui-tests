@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "types": ["node", "playwright"],
+    "moduleResolution": "node",
+    "target": "es6"
+  },
+  "include": ["./tests/**/*"]
+}
+
+  
