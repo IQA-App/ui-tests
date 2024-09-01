@@ -1,4 +1,3 @@
-//import { fixtures } from '../fixtures/dbFixture';
 import { test, expect } from '@playwright/test';
 import { DB } from '../database/db';
 

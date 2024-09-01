@@ -1,10 +1,7 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-// src/database/db.ts
-//import { Client } from 'pg';
 import { ConnectionPool } from 'mssql';
-
 
 interface DBConfig {
   user: string;
@@ -15,12 +12,6 @@ interface DBConfig {
 }
 
 export class DB {
-  //private DBConfig: DBConfig;
-
-  /*constructor(config: DBConfig) {
-    this.DBConfig = config;
-  }*/
-
   async executeQuery(query: string, config) {
     const client = new ConnectionPool(config);
     try {
