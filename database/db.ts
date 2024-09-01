@@ -20,7 +20,7 @@ export class DB {
       console.log(result.rows);
       return result.rows;
     } catch (error) {
-      console.error("Ошибка подключения/выполнения запроса:", error);
+      console.error("Connection/Query Execution Error:", error);
       throw error;
     } finally {
       
