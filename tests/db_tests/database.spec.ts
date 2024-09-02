@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { DB } from '../database/db';
-import { EMAILUSER, PASSWORDUSER } from '../testData';
+import { DB } from '../../database/db';
+import { EMAILUSER, PASSWORDUSER } from '../../testData';
 
 const dbConfig = {
     user: process.env.DB_USER!,
