@@ -1,9 +1,9 @@
-const { FullConfig } = require('@playwright/test');
-const dotenv = require('dotenv');
-const path = require('path');
-const fs = require('fs');
+import { FullConfig } from '@playwright/test';
+import dotenv from 'dotenv';
+import path from 'path';
+import fs from 'fs';
 
-module.exports = async() => {
+module.exports = async () => {
     // Determine the environment, default to 'dev'
     const env = process.env.ENVIRONMENT || 'dev';
     const envFilePath = path.resolve(__dirname, 'env', `${env}.env`);
@@ -15,5 +15,4 @@ module.exports = async() => {
     } else {
         console.error(`Environment file for ${env} not found at ${envFilePath}`);
     }
-}
-
+};
