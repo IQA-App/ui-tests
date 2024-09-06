@@ -12,7 +12,7 @@ const dbConfig = {
 
 const database = new DB(dbConfig);
 
-test.describe('Database testing', () => {
+test.describe('Database testing', { tag: ['@db'] }, () => {
     test('Verify there are users in DB', async () => {
         const result = await database.executeQuery('SELECT COUNT(*) AS userCount FROM [user];');
 

@@ -8,13 +8,16 @@
     "test:qa": "cross-env ENVIRONMENT=qa npx playwright test",
     "test:prod": "cross-env ENVIRONMENT=prod npx playwright test",
     "test": "npx playwright test",
-    "format": "npm run prettier:fix"
+    "prettier": "npx prettier . --check",
+    "prettier:fix": "npm run prettier -- --write",
+    "format": "npm run prettier:fix",
+    "grep": "npx playwright test --grep"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@playwright/test": "^1.46.1",
+    "@playwright/test": "^1.47.0",
     "@types/mssql": "^9.1.5",
     "@types/node": "^22.5.0",
     "@types/pg": "^8.11.8",
