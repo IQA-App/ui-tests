@@ -29,6 +29,7 @@ jobs:
           SERVERPORT: ${{ secrets.SERVERPORT}}
           EMAIL_PREFIX: ${{ secrets.EMAIL_PREFIX}}
           EMAIL_DOMAIN: ${{ secrets.EMAIL_DOMAIN}}
+          CI_RUN: true
 
       - uses: actions/upload-artifact@v4
         if: always()
