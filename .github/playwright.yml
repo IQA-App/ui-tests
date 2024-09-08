@@ -19,20 +19,16 @@ jobs:
       - name: Run Playwright Chrome tests
         run: npm test
         env:
-        DB_HOST='devenvserver.database.windows.net'
-
-          URL: ${{ secrets.URL}}
-          DB_PORT=1433
-          DB_USER='dbadmin'
-          DB_PASSWORD='notpassword1@'
-          DB_NAME='devdb'
-          SERVERPORT=3000
-          EMAIL_PREFIX='IQAtest+'
-          EMAIL_DOMAIN='@gmail.com'
-          DB_DATA: ${{ secrets.DB_DATA }}
-          //DB_DATA=mssql://dbadmin:notpassword1@devenvserver.database.windows.net:1433/devdb
-          EMAIL_PREFIX: ${{ secrets.EMAIL_PREFIX }}
-          EMAIL_DOMAIN: ${{ secrets.EMAIL_DOMAIN }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL}}
+          UI_BASE_URL: ${{ secrets.UI_BASE_URL}}
+          DB_HOST: ${{ secrets.DB_HOST}}
+          DB_PORT: ${{ secrets.DB_PORT}}
+          DB_USER: ${{ secrets.DB_USER}}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD}}
+          DB_NAME: ${{ secrets.DB_NAME}}
+          SERVERPORT: ${{ secrets.SERVERPORT}}
+          EMAIL_PREFIX: ${{ secrets.EMAIL_PREFIX}}
+          EMAIL_DOMAIN: ${{ secrets.EMAIL_DOMAIN}}
           CI_RUN: true
 
       - uses: actions/upload-artifact@v4
@@ -55,13 +51,3 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PUBLISH_BRANCH: gh-pages
-
-      # - name: Send Slack notification
-      #   uses: rtCamp/action-slack-notify@v2
-      #   if: always()
-      #   env:
-      #     SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-      #     SLACK_USERNAME: Playwright GitHub Results
-      #     SLACK_COLOR: ${{ job.status }}
-      #     SLACK_ICON: https://img.icons8.com/?size=80&id=dvDQO5BFduKU&format=png
-      #     SLACK_MESSAGE: 'Allure test results: https://rom-t.github.io/SignaturelyAdvance/${{ github.run_number }}'
