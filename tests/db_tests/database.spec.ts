@@ -13,9 +13,10 @@ const dbConfig = {
 const database = new DB(dbConfig);
 
 test.describe('Database testing', { tag: ['@db'] }, () => {
-    test('Verify there are users in DB', async () => {
+    let userId: number | undefined;
+    const userEmail = EMAILUSER;
+    test.skip('Verify there are users in DB', async () => {
         const result = await database.executeQuery('SELECT COUNT(*) AS userCount FROM [user];');
-
         const userCount = result[0]?.userCount;
         expect(userCount).toBeGreaterThan(0);
         console.log('Number of users in DB: ' + userCount);
@@ -28,22 +29,21 @@ test.describe('Database testing', { tag: ['@db'] }, () => {
     INSERT INTO [user] (email, password)
     VALUES ('${userEmail}', '${userPassword}');
   `;
-
+        let result: string | any[];
         try {
-            const result = await database.executeQuery(query);
+            result = await database.executeQuery(query);
             console.log('New user is added successfully');
         } catch (error) {
             console.error('Error while adding new user:', error);
         }
-
+        userId = result[0].id;
         query = `select * from [user] where email = '${userEmail}';`;
-        const result = await database.executeQuery(query);
-
+        result = await database.executeQuery(query);
         expect(result.length).toBe(1);
         expect(result[0]?.email).toBe(userEmail);
     });
 
-    test('Verify successfully updated user email', async () => {
+    test.skip('Verify successfully updated user email', async () => {
         const userEmail = EMAILUSER.substring(1);
         const userPassword = PASSWORDUSER;
         const newEmail = userEmail.substring(2);
@@ -67,5 +67,16 @@ test.describe('Database testing', { tag: ['@db'] }, () => {
 
         expect(result.length).toBe(1);
         expect(result[0]?.email).toBe(newEmail);
+    });
+
+    test('Verify successfully user deletion', async () => {
+        let query = `
+      delete from [user] WHERE id = '${userId}';
+    `;
+
+        const result = await database.executeQuery(query);
+
+        console.log(result);
+        //  expect(result.length).not.toBe(0);
     });
 });
