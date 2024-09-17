@@ -1,7 +1,6 @@
 import { faker } from '@faker-js/faker';
 
 export const getRandomEmail = () => {
-    
     return faker.internet.email();
 };
 
@@ -10,14 +9,23 @@ export const getRandomPassword = () => {
     while (!/[0-9]/.test(password) || !/[a-z]/.test(password) || !/[A-Z]/.test(password) || !/[\W_]/.test(password)) {
         const randomLength = Math.floor(Math.random() * (20 - 6 + 1)) + 6;
         password = faker.internet.password({
-            length: randomLength, 
-            pattern: /[A-Za-z0-9_\W]/
+            length: randomLength,
+            pattern: /[A-Za-z0-9_\W]/,
         });
     }
-    
-
     return password;
 };
+export const getRandomPasswordWithLength = (length: number) => {
+    let password = '';
+    while (!/[0-9]/.test(password) || !/[a-z]/.test(password) || !/[A-Z]/.test(password) || !/[\W_]/.test(password)) {
+        password = faker.internet.password({
+            length: length,
+            pattern: /[A-Za-z0-9_\W]/, // Включает буквы, цифры, специальные символы и подчеркивания
+        });
+    }
+    return password;
+};
+
 export const API_URL_END_POINTS = {
     categoryCreateEndPoint: '/category',
     userCreateEndPoint: '/user',
@@ -46,4 +54,33 @@ export const NEGATIVE_PASSWORD_DATA_SET = [
     ['No lowercase letter in the password', 'PASSWORD1!', 'Password must contain at least one lowercase letter!'],
     ['No uppercase letter in the password', 'password1!', 'Password must contain at least one uppercase letter!'],
     ['Empty password field', '', 'Password must contains at least one digit!'],
+];
+
+type PasswordLengthInfo = {
+    description: string;
+    length: number;
+    statusCode: number;
+};
+
+export const PASSWORD_LENGTH: PasswordLengthInfo[] = [
+    {
+        description: 'Error if password is 5 characters long',
+        length: 5,
+        statusCode: 400,
+    },
+    {
+        description: 'Error if password is 21 characters long',
+        length: 21,
+        statusCode: 400,
+    },
+    {
+        description: 'Create user if password is 6 characters long',
+        length: 6,
+        statusCode: 201,
+    },
+    {
+        description: 'Create user if password is 20 characters long',
+        length: 20,
+        statusCode: 201,
+    },
 ];
