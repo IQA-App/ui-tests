@@ -75,7 +75,6 @@ test.describe('EG API Negative Tests', () => {
 
     NEGATIVE_EMAIL_DATA_SET.forEach((typeEmailField) => {
         test(`Verify non-successful creation of user in case of invalid email and valid password: ${typeEmailField[0]}`, async ({ request }) => {
-        const userPassword = getRandomPassword();
 
         let response = await request.post(createUrl, {
             data: {
@@ -96,7 +95,6 @@ test.describe('EG API Negative Tests', () => {
 
 NEGATIVE_PASSWORD_DATA_SET.forEach((typePasswordField) => {
     test(`Verify non-successful creation of user if: ${typePasswordField[0]}`, async ({ request }) => {
-    const userEmail = getRandomEmail;
 
     let response = await request.post(createUrl, {
         data: {
