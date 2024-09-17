@@ -1,0 +1,21 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+      "email": { 
+        "type": "string", 
+        "format": "email", 
+        "example": "user@example.com"
+      },
+      "password": {
+        "type": "string",
+        "minLength": 6,
+        "maxLength": 20,
+        "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$",
+        "example": "Password123#",
+        "description": "Password must be at least 6 characters long and no more than 20 characters long! Password must contain at least one digit and at least one lowercase letter and at least one uppercase letter!"
+      }
+    },
+    "required": ["email", "password"]
+  }
+  
