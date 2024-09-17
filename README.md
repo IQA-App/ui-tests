@@ -81,3 +81,10 @@ SERVERPORT=
 EMAIL_PREFIX=
 EMAIL_DOMAIN=
 ```
+
+## faker-js set up
+
+Faker.js GitHub Documentation: https://fakerjs.dev/
+
+npm install @faker-js/faker playwright
+

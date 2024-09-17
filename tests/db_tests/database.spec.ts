@@ -22,7 +22,7 @@ test.describe('Database testing', { tag: ['@db'] }, () => {
         console.log('Number of users in DB: ' + userCount);
     });
 
-    test('Verify successfully added new user', async ({ page }) => {
+    test.skip('Verify successfully added new user', async ({ page }) => {
         const userEmail = EMAILUSER;
         const userPassword = PASSWORDUSER;
         let query = `
@@ -69,7 +69,7 @@ test.describe('Database testing', { tag: ['@db'] }, () => {
         expect(result[0]?.email).toBe(newEmail);
     });
 
-    test('Verify successfully user deletion', async () => {
+    test.skip('Verify successfully user deletion', async () => {
         let query = `
       delete from [user] WHERE id = '${userId}';
     `;

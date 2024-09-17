@@ -1,27 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { API_URL_END_POINTS } from '../../apiData';
-import { EMAILUSER, PASSWORDUSER } from '../../testData';
-import Ajv from 'ajv';
-import addFormats from 'ajv-formats';
-
-const requiredSchema = {
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "type": "object",
-    "properties": {
-      "email": {
-        "type": "string",
-        "format": "email",
-      },
-      "password": {
-        "type": "string",
-        "minLength": 6,
-        "maxLength": 20,
-        "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$",
-        "description": "Password must be at least 6 characters long and no more than 20 characters long! Password must contain at least one digit and at least one lowercase letter and at least one uppercase letter!"
-      }
-    },
-    "required": ["email", "password"]
-  };
+import { API_URL_END_POINTS, getRandomEmail, getRandomPassword, NEGATIVE_EMAIL_DATA_SET, NEGATIVE_PASSWORD_DATA_SET } from '../../apiData';
 
 test.describe('EG API Tests', () => {
 
@@ -42,9 +20,9 @@ test.describe('EG API Tests', () => {
     test('E2E test. Create, update and delete user with valid credentials', { tag: ['@api'] }, async ({ request }) => {
         const baseUrl = process.env.API_BASE_URL;
         const createUrl = `${baseUrl}${API_URL_END_POINTS.userCreateEndPoint}`;
-        const userEmail = EMAILUSER;
-        const userPassword = PASSWORDUSER.slice(0, 10);
-        const newUserEmail = EMAILUSER.slice(3);
+        const userEmail = getRandomEmail();
+        const userPassword = getRandomPassword();
+        const newUserEmail = getRandomEmail();
 
         let response = await request.post(createUrl, {
             data: {
@@ -54,6 +32,8 @@ test.describe('EG API Tests', () => {
         });
 
         let responseBody = await response.json();
+        console.log(responseBody);
+
         const userId = responseBody.user.id;
         const token = responseBody.access_token;
 
@@ -88,76 +68,52 @@ test.describe('EG API Tests', () => {
     });
 });
 
-const ajv = new Ajv();
-addFormats(ajv);
-const validate = ajv.compile(requiredSchema);
 
-const validateData = (data: any) => {
-  const valid = validate(data);
-  if (!valid) {
-    console.error("Validation failed:");
-    console.error(validate.errors);
-  }
-  return {
-    valid,
-    errors: validate.errors
-  };
-};
+test.describe('EG API Negative Tests', () => {
+    const baseUrl = process.env.API_BASE_URL;
+    const createUrl = `${baseUrl}${API_URL_END_POINTS.userCreateEndPoint}`;
 
-const validData = [
-  {
-    email: "usar00123423432342@example.com",
-    password: "ValidPass12!"
-  },
-  {
-    email: "usar002342423422@example.com",
-    password: "AnotherPass22!"
-  }
-];
+    NEGATIVE_EMAIL_DATA_SET.forEach((typeEmailField) => {
+        test(`Verify non-successful creation of user in case of invalid email and valid password: ${typeEmailField[0]}`, async ({ request }) => {
+        const userPassword = getRandomPassword();
 
-const invalidData = [
-  {
-    email: "invalidemail",
-    password: "short"
-  },
-  {
-    email: "user@example.com",
-    password: "missingdigit"
-  },
-  {
-    email: "user003@example.com"
-  }
-];
+        let response = await request.post(createUrl, {
+            data: {
+                email: typeEmailField[1],
+                password: getRandomPassword,
+            },
+        });
 
-test.describe('API Validation Tests with Ajv', () => {
-    
+        let responseBody = await response.json();
+        const error = responseBody.error;
+        const message = responseBody.message;
 
-  const baseUrl = process.env.API_BASE_URL;
-  const createUrl = `${baseUrl}${API_URL_END_POINTS.userCreateEndPoint}`;
+        expect(response.status()).toBe(400);
+        expect(responseBody.error).toBe('Bad Request');
+        expect(responseBody.message[0]).toBe("email must be an email");
+    });
+});
 
-  test('Create user with valid data', async ({ request }) => {
-    for (const data of validData) {
+NEGATIVE_PASSWORD_DATA_SET.forEach((typePasswordField) => {
+    test(`Verify non-successful creation of user if: ${typePasswordField[0]}`, async ({ request }) => {
+    const userEmail = getRandomEmail;
 
-      const response = await request.post(createUrl, { data });
-      const responseBody = await response.json();
-      console.log(responseBody);
+    let response = await request.post(createUrl, {
+        data: {
+            email: getRandomEmail(),
+            password: typePasswordField[1],
+        },
+    });
 
-      expect(response.status()).toBe(201);
+    let responseBody = await response.json();
+    const error = responseBody.error;
+    const message = responseBody.message;
 
-      const validation = validateData(responseBody);
-     // expect(validation.valid).toBe(true);
-    }
-  });
-
-  test('Create user with invalid data', async ({ request }) => {
-    for (const data of invalidData) {
-      const response = await request.post(createUrl, { data });
-
-      expect(response.status()).toBe(400);
-      const responseBody = await response.json();
-
-      const validation = validateData(responseBody);
-      expect(validation.valid).toBe(false);
-    }
-  });
+    expect(response.status()).toBe(400);
+    expect(responseBody.error).toBe('Bad Request');
+    expect(responseBody.message[0]).toContain(typePasswordField[2]);
+});
+});
 })
+
+
