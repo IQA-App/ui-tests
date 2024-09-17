@@ -7,9 +7,14 @@ export const getRandomEmail = () => {
 
 export const getRandomPassword = () => {
     let password = '';
-    while (!/[0-9]/.test(password) || !/[a-z]/.test(password) || !/[A-Z]/.test(password)) {
-        password = faker.internet.password({ length: 20, pattern: /[A-Za-z0-9]/ });
+    while (!/[0-9]/.test(password) || !/[a-z]/.test(password) || !/[A-Z]/.test(password) || !/[\W_]/.test(password)) {
+        const randomLength = Math.floor(Math.random() * (20 - 6 + 1)) + 6;
+        password = faker.internet.password({
+            length: randomLength, 
+            pattern: /[A-Za-z0-9_\W]/
+        });
     }
+    
 
     return password;
 };
