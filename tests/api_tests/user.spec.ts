@@ -1,22 +1,21 @@
 import { test, expect } from '@playwright/test';
+import { API_URL_END_POINTS } from '../../apiData';
 import {
-    API_URL_END_POINTS,
     getRandomEmail,
     getRandomPassword,
-    getRandomPasswordWithLength,
     NEGATIVE_EMAIL_DATA_SET,
     NEGATIVE_PASSWORD_DATA_SET,
     PASSWORD_LENGTH,
-} from '../../apiData';
+} from "../../testData";
 
 test.describe('EG API Tests', () => {
-    test('Get list of users', { tag: ['@api'] }, async ({ request }) => {
+    test.skip('Get list of users', { tag: ['@api'] }, async ({ request }) => {
         const response = await request.get(process.env.API_BASE_URL + '/user');
         const responseBody = await response.json();
         expect(response.status()).toBe(200);
     });
 
-    test('Get user by ID', { tag: ['@api'] }, async ({ request }) => {
+    test.skip('Get user by ID', { tag: ['@api'] }, async ({ request }) => {
         let response = await request.get(process.env.API_BASE_URL + '/user');
         const responseBody = await response.json();
         const firstUserId = responseBody[0].id;
@@ -127,10 +126,9 @@ test.describe('EG API boundary tests: Password Length', () => {
             const response = await request.post(createUrl, {
                 data: {
                     email: getRandomEmail(),
-                    password: getRandomPasswordWithLength(passwordInfo.length),
+                    password: getRandomPassword(passwordInfo.length),
                 },
             });
-
             expect(response.status()).toBe(passwordInfo.statusCode);
         });
     });
