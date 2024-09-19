@@ -1,5 +1,3 @@
-
-
 export const API_URL_END_POINTS = {
     categoryCreateEndPoint: '/category',
     userCreateEndPoint: '/user',
@@ -7,5 +5,3 @@ export const API_URL_END_POINTS = {
     userDeleteEndPoint: '/user/',
     userUpdateEndPoint: '/user/',
 };
-
-

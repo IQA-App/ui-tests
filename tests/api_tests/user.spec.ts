@@ -6,7 +6,7 @@ import {
     NEGATIVE_EMAIL_DATA_SET,
     NEGATIVE_PASSWORD_DATA_SET,
     PASSWORD_LENGTH,
-} from "../../testData";
+} from '../../testData';
 
 test.describe('EG API Tests', () => {
     test.skip('Get list of users', { tag: ['@api'] }, async ({ request }) => {

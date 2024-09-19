@@ -16,8 +16,7 @@ export const getRandomPassword = (length?: number) => {
             throw new Error('Length must be a positive integer greater than zero.');
         }
         passwordLength = length;
-    }
-    else { 
+    } else {
         passwordLength = randomLength;
     }
     while (!/[0-9]/.test(password) || !/[a-z]/.test(password) || !/[A-Z]/.test(password) || !/[\W_]/.test(password)) {
