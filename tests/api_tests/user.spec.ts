@@ -9,23 +9,62 @@ import {
 } from '../../testData';
 
 test.describe('EG API Tests', () => {
-    test.skip('Get list of users', { tag: ['@api'] }, async ({ request }) => {
-        const response = await request.get(process.env.API_BASE_URL + '/user');
-        const responseBody = await response.json();
+    test('Get list of users', { tag: ['@api'] }, async ({ request }) => {
+        const baseUrl = process.env.API_BASE_URL;
+        const createUrl = `${baseUrl}${API_URL_END_POINTS.userEndPoint}`;
+        const userEmail = getRandomEmail();
+        const userPassword = getRandomPassword();
+
+        let response = await request.post(createUrl, {
+            data: {
+                email: userEmail,
+                password: userPassword,
+            },
+        });
+
+        let responseBody = await response.json();
+        const userId = responseBody.user.id;
+        const token = responseBody.access_token;
+
+        response = await request.get(createUrl, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        responseBody = await response.json();
         expect(response.status()).toBe(200);
     });
 
-    test.skip('Get user by ID', { tag: ['@api'] }, async ({ request }) => {
-        let response = await request.get(process.env.API_BASE_URL + '/user');
-        const responseBody = await response.json();
-        const firstUserId = responseBody[0].id;
-        response = await request.get(process.env.API_BASE_URL + '/user/' + firstUserId);
+    test('Get user by ID', { tag: ['@api'] }, async ({ request }) => {
+        const baseUrl = process.env.API_BASE_URL;
+        const createUrl = `${baseUrl}${API_URL_END_POINTS.userEndPoint}`;
+        const userEmail = getRandomEmail();
+        const userPassword = getRandomPassword();
+
+        let response = await request.post(createUrl, {
+            data: {
+                email: userEmail,
+                password: userPassword,
+            },
+        });
+
+        let responseBody = await response.json();
+        const userId = responseBody.user.id;
+        const token = responseBody.access_token;
+        response = await request.get(process.env.API_BASE_URL + '/user');
+        responseBody = await response.json();
+
+        response = await request.get(process.env.API_BASE_URL + '/user/' + userId, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
         expect(response.status()).toBe(200);
     });
 
     test('E2E test. Create, update and delete user with valid credentials', { tag: ['@api'] }, async ({ request }) => {
         const baseUrl = process.env.API_BASE_URL;
-        const createUrl = `${baseUrl}${API_URL_END_POINTS.userCreateEndPoint}`;
+        const createUrl = `${baseUrl}${API_URL_END_POINTS.userEndPoint}`;
         const userEmail = getRandomEmail();
         const userPassword = getRandomPassword();
         const newUserEmail = getRandomEmail();
@@ -44,7 +83,7 @@ test.describe('EG API Tests', () => {
         expect(responseBody.user.email).toBe(userEmail);
         expect(response.status()).toBe(201);
 
-        const updateUrl = `${baseUrl}${API_URL_END_POINTS.userUpdateEndPoint}${userId}`;
+        const updateUrl = `${baseUrl}${API_URL_END_POINTS.userEndPoint}${userId}`;
 
         response = await request.patch(updateUrl, {
             headers: {
@@ -59,7 +98,7 @@ test.describe('EG API Tests', () => {
         expect(responseBody.email).toBe(newUserEmail);
         expect(response.status()).toBe(200);
 
-        const deleteUrl = `${baseUrl}${API_URL_END_POINTS.userUpdateEndPoint}${userId}`;
+        const deleteUrl = `${baseUrl}${API_URL_END_POINTS.userEndPoint}${userId}`;
         response = await request.delete(deleteUrl, {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -74,7 +113,7 @@ test.describe('EG API Tests', () => {
 
 test.describe('EG API Negative Tests', () => {
     const baseUrl = process.env.API_BASE_URL;
-    const createUrl = `${baseUrl}${API_URL_END_POINTS.userCreateEndPoint}`;
+    const createUrl = `${baseUrl}${API_URL_END_POINTS.userEndPoint}`;
 
     NEGATIVE_EMAIL_DATA_SET.forEach((typeEmailField) => {
         test(`Verify non-successful creation of user in case of invalid email and valid password: ${typeEmailField[0]}`, async ({
@@ -119,7 +158,7 @@ test.describe('EG API Negative Tests', () => {
 
 test.describe('EG API boundary tests: Password Length', () => {
     const baseUrl = process.env.API_BASE_URL;
-    const createUrl = `${baseUrl}${API_URL_END_POINTS.userCreateEndPoint}`;
+    const createUrl = `${baseUrl}${API_URL_END_POINTS.userEndPoint}`;
 
     PASSWORD_LENGTH.forEach((passwordInfo) => {
         test(`Verify password length constraint: ${passwordInfo.description}`, async ({ request }) => {
