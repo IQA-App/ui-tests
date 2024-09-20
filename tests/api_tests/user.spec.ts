@@ -1,28 +1,19 @@
 import { test, expect } from '@playwright/test';
-import { API_URL_END_POINTS, NEGATIVE_EMAIL_DATA_SET, NEGATIVE_PASSWORD_DATA_SET } from '../../apiData';
-import { EMAILUSER, PASSWORDUSER } from '../../testData';
+import { API_URL_END_POINTS } from '../../apiData';
+import {
+    getRandomEmail,
+    getRandomPassword,
+    NEGATIVE_EMAIL_DATA_SET,
+    NEGATIVE_PASSWORD_DATA_SET,
+    PASSWORD_LENGTH,
+} from '../../testData';
 
-test.describe('EG API Positive Tests', () => {
+test.describe('EG API Tests', () => {
     test('Get list of users', { tag: ['@api'] }, async ({ request }) => {
-        const response = await request.get(process.env.API_BASE_URL + '/user');
-        const responseBody = await response.json();
-        expect(response.status()).toBe(200);
-    });
-
-    test('Get user by ID', { tag: ['@api'] }, async ({ request }) => {
-        let response = await request.get(process.env.API_BASE_URL + '/user');
-        const responseBody = await response.json();
-        const firstUserId = responseBody[0].id;
-        response = await request.get(process.env.API_BASE_URL + '/user/' + firstUserId);
-        expect(response.status()).toBe(200);
-    });
-
-    test('E2E test. Create, update and delete user with valid credentials', { tag: ['@api'] }, async ({ request }) => {
         const baseUrl = process.env.API_BASE_URL;
-        const createUrl = `${baseUrl}${API_URL_END_POINTS.userCreateEndPoint}`;
-        const userEmail = EMAILUSER;
-        const userPassword = PASSWORDUSER.slice(0, 10);
-        const newUserEmail = EMAILUSER.slice(3);
+        const createUrl = `${baseUrl}${API_URL_END_POINTS.userEndPoint}`;
+        const userEmail = getRandomEmail();
+        const userPassword = getRandomPassword();
 
         let response = await request.post(createUrl, {
             data: {
@@ -35,12 +26,64 @@ test.describe('EG API Positive Tests', () => {
         const userId = responseBody.user.id;
         const token = responseBody.access_token;
 
-        expect(response.status()).toBe(201);
+        response = await request.get(createUrl, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        responseBody = await response.json();
+        expect(response.status()).toBe(200);
+    });
 
-        response = await request.get(`${baseUrl}/${userId}`);
+    test('Get user by ID', { tag: ['@api'] }, async ({ request }) => {
+        const baseUrl = process.env.API_BASE_URL;
+        const createUrl = `${baseUrl}${API_URL_END_POINTS.userEndPoint}`;
+        const userEmail = getRandomEmail();
+        const userPassword = getRandomPassword();
+
+        let response = await request.post(createUrl, {
+            data: {
+                email: userEmail,
+                password: userPassword,
+            },
+        });
+
+        let responseBody = await response.json();
+        const userId = responseBody.user.id;
+        const token = responseBody.access_token;
+        response = await request.get(process.env.API_BASE_URL + '/user');
         responseBody = await response.json();
 
-        const updateUrl = `${baseUrl}${API_URL_END_POINTS.userUpdateEndPoint}${userId}`;
+        response = await request.get(process.env.API_BASE_URL + '/user/' + userId, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        expect(response.status()).toBe(200);
+    });
+
+    test('E2E test. Create, update and delete user with valid credentials', { tag: ['@api'] }, async ({ request }) => {
+        const baseUrl = process.env.API_BASE_URL;
+        const createUrl = `${baseUrl}${API_URL_END_POINTS.userEndPoint}`;
+        const userEmail = getRandomEmail();
+        const userPassword = getRandomPassword();
+        const newUserEmail = getRandomEmail();
+
+        let response = await request.post(createUrl, {
+            data: {
+                email: userEmail,
+                password: userPassword,
+            },
+        });
+
+        let responseBody = await response.json();
+        const userId = responseBody.user.id;
+        const token = responseBody.access_token;
+
+        expect(responseBody.user.email).toBe(userEmail);
+        expect(response.status()).toBe(201);
+
+        const updateUrl = `${baseUrl}${API_URL_END_POINTS.userEndPoint}${userId}`;
 
         response = await request.patch(updateUrl, {
             headers: {
@@ -51,63 +94,81 @@ test.describe('EG API Positive Tests', () => {
             },
         });
 
+        responseBody = await response.json();
+        expect(responseBody.email).toBe(newUserEmail);
         expect(response.status()).toBe(200);
 
-        const deleteUrl = `${baseUrl}${API_URL_END_POINTS.userUpdateEndPoint}${userId}`;
+        const deleteUrl = `${baseUrl}${API_URL_END_POINTS.userEndPoint}${userId}`;
         response = await request.delete(deleteUrl, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         });
+        responseBody = await response.json();
 
+        expect(responseBody.message).toBe(`The user with id:${userId} deleted`);
         expect(response.status()).toBe(200);
     });
 });
 
-
 test.describe('EG API Negative Tests', () => {
     const baseUrl = process.env.API_BASE_URL;
-    const createUrl = `${baseUrl}${API_URL_END_POINTS.userCreateEndPoint}`;
+    const createUrl = `${baseUrl}${API_URL_END_POINTS.userEndPoint}`;
 
     NEGATIVE_EMAIL_DATA_SET.forEach((typeEmailField) => {
-        test(`Verify non-successful creation of user in case of invalid email and valid password: ${typeEmailField[0]}`, async ({ request }) => {
-        const userPassword = PASSWORDUSER.slice(0, 10);
+        test(`Verify non-successful creation of user in case of invalid email and valid password: ${typeEmailField[0]}`, async ({
+            request,
+        }) => {
+            let response = await request.post(createUrl, {
+                data: {
+                    email: typeEmailField[1],
+                    password: getRandomPassword,
+                },
+            });
 
-        let response = await request.post(createUrl, {
-            data: {
-                email: typeEmailField[1],
-                password: userPassword,
-            },
+            let responseBody = await response.json();
+            const error = responseBody.error;
+            const message = responseBody.message;
+
+            expect(response.status()).toBe(400);
+            expect(responseBody.error).toBe('Bad Request');
+            expect(responseBody.message[0]).toBe('email must be an email');
         });
+    });
 
-        let responseBody = await response.json();
-        const error = responseBody.error;
-        const message = responseBody.message;
+    NEGATIVE_PASSWORD_DATA_SET.forEach((typePasswordField) => {
+        test(`Verify non-successful creation of user if: ${typePasswordField[0]}`, async ({ request }) => {
+            let response = await request.post(createUrl, {
+                data: {
+                    email: getRandomEmail(),
+                    password: typePasswordField[1],
+                },
+            });
 
-        expect(response.status()).toBe(400);
-        expect(responseBody.error).toBe('Bad Request');
-        expect(responseBody.message[0]).toBe("email must be an email");
+            let responseBody = await response.json();
+            const error = responseBody.error;
+            const message = responseBody.message;
+
+            expect(response.status()).toBe(400);
+            expect(responseBody.error).toBe('Bad Request');
+            expect(responseBody.message[0]).toContain(typePasswordField[2]);
+        });
     });
 });
 
-NEGATIVE_PASSWORD_DATA_SET.forEach((typePasswordField) => {
-    test(`Verify non-successful creation of user if: ${typePasswordField[0]}`, async ({ request }) => {
-    const userEmail = EMAILUSER;
+test.describe('EG API boundary tests: Password Length', () => {
+    const baseUrl = process.env.API_BASE_URL;
+    const createUrl = `${baseUrl}${API_URL_END_POINTS.userEndPoint}`;
 
-    let response = await request.post(createUrl, {
-        data: {
-            email: userEmail,
-            password: typePasswordField[1],
-        },
+    PASSWORD_LENGTH.forEach((passwordInfo) => {
+        test(`Verify password length constraint: ${passwordInfo.description}`, async ({ request }) => {
+            const response = await request.post(createUrl, {
+                data: {
+                    email: getRandomEmail(),
+                    password: getRandomPassword(passwordInfo.length),
+                },
+            });
+            expect(response.status()).toBe(passwordInfo.statusCode);
+        });
     });
-
-    let responseBody = await response.json();
-    const error = responseBody.error;
-    const message = responseBody.message;
-
-    expect(response.status()).toBe(400);
-    expect(responseBody.error).toBe('Bad Request');
-    expect(responseBody.message[0]).toContain(typePasswordField[2]);
 });
-});
-})
