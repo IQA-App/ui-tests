@@ -7,26 +7,17 @@ import {
     NEGATIVE_PASSWORD_DATA_SET,
     PASSWORD_LENGTH,
 } from '../../testData';
+import { createUserRequest } from '../../helpers/apiCall';
+import { ur } from '@faker-js/faker/.';
 
 test.describe('EG API Tests', () => {
     test('Get list of users', { tag: ['@api'] }, async ({ request }) => {
-        const baseUrl = process.env.API_BASE_URL;
-        const createUrl = `${baseUrl}${API_URL_END_POINTS.userEndPoint}`;
-        const userEmail = getRandomEmail();
-        const userPassword = getRandomPassword();
-
-        let response = await request.post(createUrl, {
-            data: {
-                email: userEmail,
-                password: userPassword,
-            },
-        });
-
+        const url = `${process.env.API_BASE_URL}${API_URL_END_POINTS.userEndPoint}`;
+        let response = await createUserRequest(request);
         let responseBody = await response.json();
-        const userId = responseBody.user.id;
         const token = responseBody.access_token;
 
-        response = await request.get(createUrl, {
+        response = await request.get(url, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -36,25 +27,13 @@ test.describe('EG API Tests', () => {
     });
 
     test('Get user by ID', { tag: ['@api'] }, async ({ request }) => {
-        const baseUrl = process.env.API_BASE_URL;
-        const createUrl = `${baseUrl}${API_URL_END_POINTS.userEndPoint}`;
-        const userEmail = getRandomEmail();
-        const userPassword = getRandomPassword();
-
-        let response = await request.post(createUrl, {
-            data: {
-                email: userEmail,
-                password: userPassword,
-            },
-        });
-
+        const url = `${process.env.API_BASE_URL}${API_URL_END_POINTS.userEndPoint}`;
+        let response = await createUserRequest(request);
         let responseBody = await response.json();
         const userId = responseBody.user.id;
         const token = responseBody.access_token;
-        response = await request.get(process.env.API_BASE_URL + '/user');
-        responseBody = await response.json();
 
-        response = await request.get(process.env.API_BASE_URL + '/user/' + userId, {
+        response = await request.get(url + userId, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
