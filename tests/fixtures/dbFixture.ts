@@ -1,4 +1,4 @@
-import { beforeEach, afterEach } from 'node:test';
+import { before, beforeEach, afterEach, after } from 'node:test';
 import { DB } from '../../database/db';
 
 const dbConfig = {
@@ -9,28 +9,21 @@ const dbConfig = {
     port: Number(process.env.DB_PORT),
 };
 
-const db = new DB();
+const db = new DB(dbConfig);
 
-beforeAll(async () => {
-    await db.executeQuery('SELECT NOW()', dbConfig);
+before(async () => {
+    await db.executeQuery('SELECT NOW()');
 });
 
 beforeEach(async () => {
-    await db.executeQuery(`INSERT INTO users (name, email) VALUES ('Test User', 'test@example.com')`, dbConfig);
+    await db.executeQuery(`INSERT INTO users (name, email) VALUES ('Test User', 'test@example.com')`);
 });
 
 afterEach(async () => {
-    await db.executeQuery('DELETE FROM users;', dbConfig);
+    await db.executeQuery('DELETE FROM users;');
 });
 
-afterAll(async () => {
-    await db.executeQuery('SELECT NOW()', dbConfig);
+after(async () => {
+    await db.executeQuery('SELECT NOW()');
+    await db.close();
 });
-
-function beforeAll(arg0: () => Promise<void>) {
-    throw new Error('Function not implemented.');
-}
-
-function afterAll(arg0: () => Promise<void>) {
-    throw new Error('Function not implemented.');
-}
