@@ -78,3 +78,5 @@ export const PASSWORD_LENGTH: PasswordLengthInfo[] = [
         statusCode: 201,
     },
 ];
+
+export const CATEGORY_NAME = ['shop', 'room', 'appartment', 'house'];

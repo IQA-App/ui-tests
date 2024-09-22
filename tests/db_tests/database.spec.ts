@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { DB } from '../../database/db';
-import { EMAILUSER, PASSWORDUSER } from '../../testData';
+import { getRandomEmail, getRandomPassword } from '../../testData';
 
 const dbConfig = {
     user: process.env.DB_USER!,
@@ -14,7 +14,7 @@ const database = new DB(dbConfig);
 
 test.describe('Database testing', { tag: ['@db'] }, () => {
     let userId: number | undefined;
-    const userEmail = EMAILUSER;
+    const userEmail = getRandomEmail;
     test.skip('Verify there are users in DB', async () => {
         const result = await database.executeQuery('SELECT COUNT(*) AS userCount FROM [user];');
         const userCount = result[0]?.userCount;
@@ -23,8 +23,8 @@ test.describe('Database testing', { tag: ['@db'] }, () => {
     });
 
     test.skip('Verify successfully added new user', async ({ page }) => {
-        const userEmail = EMAILUSER;
-        const userPassword = PASSWORDUSER;
+        const userEmail = getRandomEmail;
+        const userPassword = getRandomPassword;
         let query = `
     INSERT INTO [user] (email, password)
     VALUES ('${userEmail}', '${userPassword}');
@@ -44,9 +44,9 @@ test.describe('Database testing', { tag: ['@db'] }, () => {
     });
 
     test.skip('Verify successfully updated user email', async () => {
-        const userEmail = EMAILUSER.substring(1);
-        const userPassword = PASSWORDUSER;
-        const newEmail = userEmail.substring(2);
+        const userEmail = getRandomEmail;
+        const userPassword = getRandomPassword;
+        const newEmail = getRandomEmail;
         console.log(newEmail);
 
         let query = `
