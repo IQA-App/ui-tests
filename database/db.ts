@@ -40,7 +40,7 @@ export class DB {
     async executeQuery(query: string, params?: any[]) {
         try {
             const res = await this.pool.query(query, params);
-            return res.rows; 
+            return res.rows;
         } catch (error) {
             console.error('Query Execution Error:', error);
             throw error;
