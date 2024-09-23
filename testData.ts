@@ -80,3 +80,8 @@ export const PASSWORD_LENGTH: PasswordLengthInfo[] = [
 ];
 
 export const CATEGORY_NAME = ['shop', 'room', 'appartment', 'house'];
+
+export const NEGATIVE_CATEGORY = [
+    ['empty title', '', 400, 'title should not be empty'],
+    //   ['title is not string', 123, 400, 'Title must be a string!'],
+];
