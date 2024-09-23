@@ -5,3 +5,10 @@ test.skip('should check response status', { tag: ['@api'] }, async ({ request })
     console.log(JSON.stringify(response));
     expect(response['_initializer'].status).toBe(200);
 });
+test('Assert 401 response status', async ({request}) =>{
+    const response = await request.get (process.env.API_BASE_URL + '/user')
+    expect (response.status()).toBe(401)
+    
+    const responseBody = JSON.parse (await response.text())
+    console.log(responseBody)
+})
