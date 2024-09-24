@@ -6,7 +6,7 @@ test.skip('should check response status', { tag: ['@api'] }, async ({ request })
     console.log(JSON.stringify(response));
     expect(response['_initializer'].status).toBe(200);
 });
-test('Retrieve all users by get api/user', async ({ request }) => {
+test('Negative test| Unauthorized user by GET api/user', async ({ request }) => {
         const response = await request.get(process.env.API_BASE_URL + API_URL_END_POINTS.userEndPoint);
         expect(response.status()).toBe(401);
         
