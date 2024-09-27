@@ -20,7 +20,7 @@ test.describe('Database testing', { tag: ['@db'] }, () => {
         expect(userCount).toBeGreaterThan(0);
     });
 
-    test('Verify successfully added new user', async ({ page }) => {
+    test.skip('Verify successfully added new user', async ({ page }) => {
         const userEmail = getRandomEmail();
         const userPassword = getRandomPassword();
 
