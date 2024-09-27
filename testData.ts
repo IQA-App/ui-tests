@@ -80,3 +80,20 @@ export const PASSWORD_LENGTH: PasswordLengthInfo[] = [
 ];
 
 export const CATEGORY_NAME = ['shop', 'room', 'appartment', 'house'];
+
+export const NEGATIVE_CATEGORY = [
+    ['empty title', '', 400, 'title should not be empty'],
+    //   ['title is not string', 123, 400, 'Title must be a string!'],
+];
+
+export const MISSED_CREDENTIALS = [
+    ['email', 400, 'Bad Request'],
+    ['password', 400, 'Bad Request'],
+];
+
+export const NEGATIVE_USER_ID = [
+    ['not a zero', 0],
+    ['not a number', 'letter'],
+    ['a space', ' '],
+    ['not a positive number', -5],
+];
