@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-import { ConnectionPool, config as SQLConfig } from 'mssql';
+import { Pool } from 'pg';
 
 interface DBConfig {
     user: string;
@@ -12,35 +12,38 @@ interface DBConfig {
 }
 
 export class DB {
-    constructor(private config: DBConfig) {}
+    private pool: Pool;
 
-    private getPoolConfig(): SQLConfig {
+    constructor(private config: DBConfig) {
+        this.pool = new Pool(this.getPoolConfig());
+    }
+
+    private getPoolConfig() {
         return {
             user: this.config.user,
-            server: this.config.host,
+            host: this.config.host,
             database: this.config.database,
             password: this.config.password,
             port: this.config.port,
-            options: {
-                encrypt: true,
-            },
         };
     }
 
-    async executeQuery(query: string) {
-        const poolConfig = this.getPoolConfig();
-        const client = new ConnectionPool(poolConfig);
+    async query(text: string, params?: any[]) {
+        const res = await this.pool.query(text, params);
+        return res;
+    }
 
+    async close() {
+        await this.pool.end();
+    }
+
+    async executeQuery(query: string, params?: any[]) {
         try {
-            await client.connect();
-            const result = await client.request().query(query);
-            console.log(result.recordset);
-            return result.recordset;
+            const res = await this.pool.query(query, params);
+            return res.rows;
         } catch (error) {
-            console.error('Connection/Query Execution Error:', error);
+            console.error('Query Execution Error:', error);
             throw error;
-        } finally {
-            await client.close();
         }
     }
 }
