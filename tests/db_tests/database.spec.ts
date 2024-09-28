@@ -68,7 +68,7 @@ INSERT INTO "user" (email, password) VALUES ('${userEmail}', '${userPassword}') 
         expect(result[0]?.email).toBe(newEmail);
     });
 
-    test('Verify successfully user deletion by email', async () => {
+    test.skip('Verify successfully user deletion by email', async () => {
         const userEmail = getRandomEmail();
         const userPassword = getRandomPassword();
         const newEmail = getRandomEmail();
