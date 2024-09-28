@@ -13,7 +13,7 @@ const dbConfig = {
 const database = new DB(dbConfig);
 
 test.describe('Database testing', { tag: ['@db'] }, () => {
-    test.skip('Verify there are users in DB', async () => {
+    test('Verify there are users in DB', async () => {
         const result = await database.executeQuery('SELECT COUNT(*) AS userCount FROM "user" u;');
         const userCount = parseInt(result[0].usercount);
         console.log('Number of users in DB: ' + userCount);
