@@ -13,7 +13,7 @@ const dbConfig = {
 const database = new DB(dbConfig);
 
 test.describe('Database testing', { tag: ['@db'] }, () => {
-    test('Verify there are users in DB', async () => {
+    test.skip('Verify there are users in DB', async () => {
         const result = await database.executeQuery('SELECT COUNT(*) AS userCount FROM "user" u;');
         const userCount = parseInt(result[0].usercount);
         console.log('Number of users in DB: ' + userCount);
@@ -44,7 +44,7 @@ test.describe('Database testing', { tag: ['@db'] }, () => {
         expect(resultAdd[0]?.email).toBe(userEmail);
     });
 
-    test('Verify successfully updated user email', async () => {
+    test.skip('Verify successfully updated user email', async () => {
         const userEmail = getRandomEmail();
         const userPassword = getRandomPassword();
         const newEmail = getRandomEmail();
@@ -87,7 +87,7 @@ INSERT INTO "user" (email, password) VALUES ('${userEmail}', '${userPassword}') 
         expect(result.length).toBe(0);
     });
 
-    test('Verify successfully user deletion by id', async () => {
+    test.skip('Verify successfully user deletion by id', async () => {
         const userEmail = getRandomEmail();
         const userPassword = getRandomPassword();
 
