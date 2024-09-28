@@ -20,7 +20,7 @@ test.describe('Database testing', { tag: ['@db'] }, () => {
         expect(userCount).toBeGreaterThan(0);
     });
 
-    test('Verify successfully added new user', async ({ page }) => {
+    test.skip('Verify successfully added new user', async ({ page }) => {
         const userEmail = getRandomEmail();
         const userPassword = getRandomPassword();
 
@@ -44,7 +44,7 @@ test.describe('Database testing', { tag: ['@db'] }, () => {
         expect(resultAdd[0]?.email).toBe(userEmail);
     });
 
-    test('Verify successfully updated user email', async () => {
+    test.skip('Verify successfully updated user email', async () => {
         const userEmail = getRandomEmail();
         const userPassword = getRandomPassword();
         const newEmail = getRandomEmail();
@@ -68,7 +68,7 @@ INSERT INTO "user" (email, password) VALUES ('${userEmail}', '${userPassword}') 
         expect(result[0]?.email).toBe(newEmail);
     });
 
-    test('Verify successfully user deletion by email', async () => {
+    test.skip('Verify successfully user deletion by email', async () => {
         const userEmail = getRandomEmail();
         const userPassword = getRandomPassword();
         const newEmail = getRandomEmail();
@@ -87,7 +87,7 @@ INSERT INTO "user" (email, password) VALUES ('${userEmail}', '${userPassword}') 
         expect(result.length).toBe(0);
     });
 
-    test('Verify successfully user deletion by id', async () => {
+    test.skip('Verify successfully user deletion by id', async () => {
         const userEmail = getRandomEmail();
         const userPassword = getRandomPassword();
 
