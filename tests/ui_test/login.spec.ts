@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
 import { getRandomEmail, getRandomPassword } from '../../testData';
-import { time } from 'console';
 
 test('Valid login test', async ({ page }) => {
 
