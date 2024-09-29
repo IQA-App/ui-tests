@@ -33,3 +33,4 @@
         await expect(page.locator('a.py-2.text-white\\/50.hover\\:text-white.ml-auto.mr-10')).toHaveAttribute('href', '/auth');
         await expect(page.locator('a.py-2.text-white\\/50.hover\\:text-white.ml-auto.mr-10')).toHaveText('Log In / Sign In');
     });
+
