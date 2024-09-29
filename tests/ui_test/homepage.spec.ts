@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 
 test('Verify homepage URL', async ({ page }) => {
-    await page.goto('https://yellow-pebble-0ff6c7d0f.5.azurestaticapps.net/');
-    await expect(page).toHaveURL('https://yellow-pebble-0ff6c7d0f.5.azurestaticapps.net/');
+    await page.goto(process.env.UI_BASE_URL);
+    await expect(page).toHaveURL('https://app.westus2.cloudapp.azure.com');
 
     const homeText = page.locator('text=Home');
     await expect(homeText).toBeVisible();
