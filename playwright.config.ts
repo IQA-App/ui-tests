@@ -27,7 +27,7 @@ export default defineConfig({
     use: {
         /* Base URL to use in actions like `await page.goto('/')`. */
         // baseURL: 'http://127.0.0.1:3000',
-        baseURL: process.env.API_BASE_URL,
+        // baseURL: process.env.API_BASE_URL,
         extraHTTPHeaders: {
             // We set this header per GitHub guidelines.
             Accept: 'application/vnd.github.v3+json',
