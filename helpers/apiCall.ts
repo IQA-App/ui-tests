@@ -26,7 +26,6 @@ export async function createUserRequest(request) {
                 password: userPassword,
             },
         });
-        console.log(response);
         if (response.ok) {
             console.log(`User has been successfully created`);
             return response;
