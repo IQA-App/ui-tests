@@ -22,6 +22,7 @@ test.describe('EG API Tests Category', () => {
             },
         });
         responseBody = await response.json();
+        console.log(responseBody);
         expect(response.status()).toBe(201);
     });
 
