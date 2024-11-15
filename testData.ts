@@ -79,7 +79,30 @@ export const PASSWORD_LENGTH: PasswordLengthInfo[] = [
     },
 ];
 
-export const CATEGORY_NAME = ['shop', 'room', 'appartment', 'house'];
+export const CATEGORY_NAME = [
+    'Salary',
+    'Transport',
+    'Purchases',
+    'Food',
+    'Health',
+    'Entertainment',
+    'Utilities',
+    'Education',
+    'Rent',
+    'Insurance',
+];
+export const TRANSACTION_NAME = [
+    'Payment',
+    'Purchase',
+    'Transfer',
+    'Subscription',
+    'Donation',
+    'Service',
+    'Refund',
+    'Enrollment',
+    'Service',
+    'Invested',
+];
 
 export const NEGATIVE_CATEGORY = [
     ['empty title', '', 400, 'title should not be empty'],
