@@ -42,4 +42,3 @@ test('Verify homepage url and homepage content', async ({ page }) => {
         'Log In / Sign In'
     );
 });
-
