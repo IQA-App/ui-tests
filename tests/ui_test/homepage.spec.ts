@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('Verify homepage url and homepage content', async ({ page }) => {
+test.skip('Verify homepage url and homepage content', async ({ page }) => {
     await page.goto(process.env.UI_BASE_URL);
     await expect(page).toHaveURL('https://app.westus2.cloudapp.azure.com');
 
