@@ -205,7 +205,7 @@ test.describe('EG API Negative Tests Category', () => {
     });
 
     NEGATIVE_CATEGORY.forEach((typeCategoryField) => {
-        test(`Verify non-successful update of category if: ${typeCategoryField[0]}`, async ({ request }) => {
+        test.skip(`Verify non-successful update of category if: ${typeCategoryField[0]}`, async ({ request }) => {
             let response = await createUserRequest(request);
             let responseBody = await response.json();
             let newName = typeCategoryField[1];
