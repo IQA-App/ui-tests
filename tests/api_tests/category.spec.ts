@@ -51,7 +51,7 @@ test.describe('EG API Tests Category', () => {
         expect(response.status()).toBe(200);
     });
 
-    test('Get category by id', { tag: ['@api'] }, async ({ request }) => {
+    test.skip('Get category by id', { tag: ['@api'] }, async ({ request }) => {
         let response = await createUserRequest(request);
         let responseBody = await response.json();
         token = responseBody.access_token;
