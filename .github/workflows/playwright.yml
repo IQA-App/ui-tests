@@ -17,7 +17,9 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run Playwright Chrome tests
-        run: npm test
+        #        run: npm test
+        run: PLAYWRIGHT_JSON_OUTPUT_NAME=results.json npx playwright test --reporter=json
+
         env:
           API_BASE_URL: ${{ secrets.API_BASE_URL}}
           UI_BASE_URL: ${{ secrets.UI_BASE_URL}}
@@ -51,3 +53,10 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PUBLISH_BRANCH: gh-pages
+
+      - name: Add Github Actions report
+        uses: daun/playwright-report-summary@v3
+        if: always()
+        with:
+          report-file: results.json
+          icon-style: 'emojis'    
