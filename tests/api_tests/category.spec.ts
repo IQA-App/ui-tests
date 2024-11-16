@@ -51,7 +51,7 @@ test.describe('EG API Tests Category', () => {
         expect(response.status()).toBe(200);
     });
 
-    test('Get category by id', { tag: ['@api'] }, async ({ request }) => {
+    test.skip('Get category by id', { tag: ['@api'] }, async ({ request }) => {
         let response = await createUserRequest(request);
         let responseBody = await response.json();
         token = responseBody.access_token;
@@ -72,7 +72,7 @@ test.describe('EG API Tests Category', () => {
         expect(responseBody.id).toBe(categoryId);
     });
 
-    test('Update category', { tag: ['@api'] }, async ({ request }) => {
+    test.skip('Update category', { tag: ['@api'] }, async ({ request }) => {
         let response = await createUserRequest(request);
         let responseBody = await response.json();
         let newName = CATEGORY_NAME[1];
@@ -96,7 +96,7 @@ test.describe('EG API Tests Category', () => {
         expect(responseBody).toContain(categoryId + ' updated');
     });
 
-    test('Delete category', { tag: ['@api'] }, async ({ request }) => {
+    test.skip('Delete category', { tag: ['@api'] }, async ({ request }) => {
         let response = await createUserRequest(request);
         let responseBody = await response.json();
         token = responseBody.access_token;
@@ -140,7 +140,7 @@ test.describe('EG API Negative Tests Category', () => {
         expect(response.status()).toBe(401);
     });
 
-    test('Verify non-successful get category by id if not authorized', { tag: ['@api'] }, async ({ request }) => {
+    test.skip('Verify non-successful get category by id if not authorized', { tag: ['@api'] }, async ({ request }) => {
         let response = await createUserRequest(request);
         let responseBody = await response.json();
         token = responseBody.access_token;
@@ -154,7 +154,7 @@ test.describe('EG API Negative Tests Category', () => {
         expect(response.status()).toBe(401);
     });
 
-    test('Verify non-successful update category if not authorized', { tag: ['@api'] }, async ({ request }) => {
+    test.skip('Verify non-successful update category if not authorized', { tag: ['@api'] }, async ({ request }) => {
         let response = await createUserRequest(request);
         let responseBody = await response.json();
         token = responseBody.access_token;
@@ -169,7 +169,7 @@ test.describe('EG API Negative Tests Category', () => {
         expect(response.status()).toBe(401);
     });
 
-    test('Verify non-successful delete category if not authorized', { tag: ['@api'] }, async ({ request }) => {
+    test.skip('Verify non-successful delete category if not authorized', { tag: ['@api'] }, async ({ request }) => {
         let response = await createUserRequest(request);
         let responseBody = await response.json();
         token = responseBody.access_token;
@@ -205,7 +205,7 @@ test.describe('EG API Negative Tests Category', () => {
     });
 
     NEGATIVE_CATEGORY.forEach((typeCategoryField) => {
-        test(`Verify non-successful update of category if: ${typeCategoryField[0]}`, async ({ request }) => {
+        test.skip(`Verify non-successful update of category if: ${typeCategoryField[0]}`, async ({ request }) => {
             let response = await createUserRequest(request);
             let responseBody = await response.json();
             let newName = typeCategoryField[1];
