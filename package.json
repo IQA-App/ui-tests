@@ -8,6 +8,7 @@
     "test:qa": "cross-env ENVIRONMENT=qa npx playwright test",
     "test:prod": "cross-env ENVIRONMENT=prod npx playwright test",
     "test": "npx playwright test",
+    "testUI:chrome": "npx playwright test --ui --project chromium",
     "prettier": "npx prettier . --check",
     "prettier:fix": "npm run prettier -- --write",
     "format": "npm run prettier:fix",
